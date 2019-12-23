@@ -1,6 +1,7 @@
 package elasticsearch
 
 import (
+	elastic "github.com/elastic/go-elasticsearch/v8"
 	"github.com/go-ginger/models"
 )
 
@@ -13,12 +14,13 @@ type Index struct {
 type Config struct {
 	models.IConfig
 
-	Indexes []Index
+	ElasticConfig elastic.Config
+	Indexes       []Index
 }
 
 var config Config
 
-func InitializeConfig(input interface{}) {
-	config = Config{
-	}
+func InitializeConfig(input Config) {
+	config = input
+	Initialize()
 }
