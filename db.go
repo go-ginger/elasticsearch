@@ -7,19 +7,15 @@ import (
 
 type DB struct {
 	Client *elastic.Client
+	Config *Config
 }
 
-var db *DB
-
-func connect() {
-	client, err := elastic.NewClient(config.ElasticConfig)
+func (db *DB) Connect() {
+	client, err := elastic.NewClient(db.Config.ElasticConfig)
 	if err != nil {
 		log.Fatalf("Error creating the client: %s", err)
 	}
-	db = &DB{
-		Client: client,
-	}
-
+	db.Client = client
 	res, err := db.Client.Info()
 	if err != nil {
 		log.Fatalf("Error getting response: %s", err)
@@ -27,4 +23,5 @@ func connect() {
 	if res.IsError() {
 		log.Fatalf("Error: %s", res.String())
 	}
+	return
 }

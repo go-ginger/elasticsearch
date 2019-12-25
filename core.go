@@ -6,4 +6,6 @@ import (
 
 type DbHandler struct {
 	dl.BaseDbHandler
+
+	DB *DB
 }

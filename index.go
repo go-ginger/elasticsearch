@@ -8,12 +8,12 @@ import (
 	"strings"
 )
 
-func indexExists(index ...string) (exists bool, err error) {
+func (handler *DbHandler) indexExists(index ...string) (exists bool, err error) {
 	ctx := context.Background()
 	var r = esapi.IndicesExistsRequest{
 		Index: index,
 	}
-	resp, err := r.Do(ctx, db.Client.Transport)
+	resp, err := r.Do(ctx, handler.DB.Client.Transport)
 	if err != nil {
 		return
 	}
@@ -21,15 +21,15 @@ func indexExists(index ...string) (exists bool, err error) {
 	return
 }
 
-func ensureIndexExists(index, body string) (err error) {
-	exists, err := indexExists(index)
+func (handler *DbHandler) ensureIndexExists(index, body string) (err error) {
+	exists, err := handler.indexExists(index)
 	if exists {
 		return
 	}
-	resp, err := db.Client.Indices.Create(
+	resp, err := handler.DB.Client.Indices.Create(
 		index,
-		db.Client.Indices.Create.WithContext(context.Background()),
-		db.Client.Indices.Create.WithBody(strings.NewReader(body)),
+		handler.DB.Client.Indices.Create.WithContext(context.Background()),
+		handler.DB.Client.Indices.Create.WithBody(strings.NewReader(body)),
 	)
 	if err != nil {
 		return
