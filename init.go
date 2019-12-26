@@ -28,7 +28,7 @@ func (handler *DbHandler) InitializeConfig(config *Config) {
 			data += mapping
 		}
 		data += `}`
-		err := handler.ensureIndexExists(index.Name, data)
+		err := handler.ensureIndexExists(config.IndexNamer.GetName(index.Model), data)
 		if err != nil {
 			log.Fatalf("Error on Initialize, err: %v", err)
 		}

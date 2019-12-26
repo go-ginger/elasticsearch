@@ -7,7 +7,7 @@ import (
 )
 
 type Index struct {
-	Name    string
+	Model   interface{}
 	Mapping interface{}
 	Setting interface{}
 }
