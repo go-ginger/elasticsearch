@@ -33,5 +33,9 @@ func (handler *DbHandler) InitializeConfig(config *Config) {
 			log.Fatalf("Error on Initialize, err: %v", err)
 		}
 	}
+	handler.InsertInBackground = true
+	handler.UpdateInBackground = true
+	handler.DeleteInBackground = true
+	handler.IsFullObjectOnUpdateRequired = true
 	return
 }
