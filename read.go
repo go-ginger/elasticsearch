@@ -22,10 +22,14 @@ func (handler *DbHandler) Paginate(request models.IRequest) (result *models.Pagi
 		return
 	}
 	queryReader := bytes.NewReader(queryBytes)
+	offset := int64((req.Page - 1) * req.PerPage)
+	limit := int64(req.PerPage)
 	searchReqs := []func(*esapi.SearchRequest){
 		handler.DB.Client.Search.WithContext(context.Background()),
 		handler.DB.Client.Search.WithIndex(indexName),
 		handler.DB.Client.Search.WithBody(queryReader),
+		handler.DB.Client.Search.WithFrom(int(offset)),
+		handler.DB.Client.Search.WithSize(int(limit)),
 		handler.DB.Client.Search.WithTrackTotalHits(true),
 	}
 	sortResult := parseResult.GetSort()
