@@ -36,7 +36,7 @@ func (handler *DbHandler) Insert(request models.IRequest) (result interface{}, e
 			err = e
 		}
 	}()
-	if resp.StatusCode != 200 && resp.StatusCode != 201 {
+	if resp.IsError() {
 		buf := new(bytes.Buffer)
 		_, err = buf.ReadFrom(resp.Body)
 		if err != nil {

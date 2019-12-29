@@ -27,7 +27,7 @@ func (handler *DbHandler) Delete(request models.IRequest) (err error) {
 			err = e
 		}
 	}()
-	if resp.StatusCode != 200 {
+	if resp.IsError() {
 		buf := new(bytes.Buffer)
 		_, err = buf.ReadFrom(resp.Body)
 		if err != nil {
