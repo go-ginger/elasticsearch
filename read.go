@@ -9,6 +9,7 @@ import (
 	"github.com/go-ginger/models"
 	ge "github.com/go-ginger/models/errors"
 	"math"
+	"reflect"
 )
 
 func (handler *DbHandler) Paginate(request models.IRequest) (result *models.PaginateResult, err error) {
@@ -82,7 +83,7 @@ func (handler *DbHandler) Paginate(request models.IRequest) (result *models.Pagi
 	if err = json.NewDecoder(resp.Body).Decode(&apiResult); err != nil {
 		return
 	}
-	items := handler.GetModelsInstance()
+	items := handler.GetModelsInstancePtr()
 	if apiResult.Hits.Hits != nil {
 		hits := make([]interface{}, 0)
 		for _, hit := range apiResult.Hits.Hits {
@@ -93,10 +94,11 @@ func (handler *DbHandler) Paginate(request models.IRequest) (result *models.Pagi
 			err = e
 			return
 		}
-		err = json.Unmarshal(m, &items)
+		err = json.Unmarshal(m, items)
 		if err != nil {
 			return
 		}
+		items = reflect.ValueOf(items).Elem().Interface()
 	}
 	pageCount := uint64(math.Ceil(float64(apiResult.Hits.Total.Value) / float64(req.PerPage)))
 	result = &models.PaginateResult{
