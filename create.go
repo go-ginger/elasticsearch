@@ -20,12 +20,19 @@ func (handler *DbHandler) Insert(request models.IRequest) (result interface{}, e
 	}
 	body := string(marshalledBody)
 	indexName := handler.DB.Config.IndexNamer.GetName(req.Body)
-	indexReq := esapi.IndexRequest{
-		Index:      indexName,
-		DocumentID: fmt.Sprintf("%v", req.GetIDString()),
-		Body:       strings.NewReader(body),
-		Refresh:    "true",
+	var indexReq *esapi.IndexRequest
+	iRequestParam := request.GetTemp("esapi_request")
+	if iRequestParam != nil {
+		indexReq, _ = iRequestParam.(*esapi.IndexRequest)
 	}
+	if indexReq == nil {
+		indexReq = &esapi.IndexRequest{}
+	}
+	indexReq.Index = indexName
+	indexReq.DocumentID = fmt.Sprintf("%v", req.GetIDString())
+	indexReq.Body = strings.NewReader(body)
+	indexReq.Refresh = "true"
+
 	resp, err := indexReq.Do(context.Background(), handler.DB.Client)
 	if err != nil {
 		return
