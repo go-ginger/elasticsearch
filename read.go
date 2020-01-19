@@ -48,7 +48,7 @@ func (handler *DbHandler) Paginate(request models.IRequest) (result *models.Pagi
 		if err = json.NewDecoder(resp.Body).Decode(&e); err != nil {
 			return
 		} else {
-			err = ge.GetInternalServiceError(fmt.Sprintf("[%s] %s: %s",
+			err = ge.GetInternalServiceError(request, fmt.Sprintf("[%s] %s: %s",
 				resp.Status(),
 				e["error"].(map[string]interface{})["type"],
 				e["error"].(map[string]interface{})["reason"],
