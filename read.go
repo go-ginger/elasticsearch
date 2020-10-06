@@ -21,6 +21,7 @@ func (handler *DbHandler) Paginate(request models.IRequest) (result *models.Pagi
 	if err != nil {
 		return
 	}
+	fmt.Println(string(queryBytes))
 	queryReader := bytes.NewReader(queryBytes)
 	offset := int64((req.Page - 1) * req.PerPage)
 	limit := int64(req.PerPage)

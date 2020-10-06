@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-func (handler *DbHandler) Insert(request models.IRequest) (result interface{}, err error) {
+func (handler *DbHandler) Insert(request models.IRequest) (result models.IBaseModel, err error) {
 	req := request.GetBaseRequest()
 	marshalledBody, err := json.Marshal(req.Body)
 	if err != nil {
