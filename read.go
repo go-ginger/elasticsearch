@@ -5,11 +5,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math"
+	"reflect"
+
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 	"github.com/go-ginger/models"
 	ge "github.com/go-ginger/models/errors"
-	"math"
-	"reflect"
 )
 
 func (handler *DbHandler) Paginate(request models.IRequest) (result *models.PaginateResult, err error) {

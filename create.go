@@ -6,10 +6,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/elastic/go-elasticsearch/v8/esapi"
-	"github.com/go-ginger/models"
 	"log"
 	"strings"
+
+	"github.com/elastic/go-elasticsearch/v8/esapi"
+	"github.com/go-ginger/models"
 )
 
 func (handler *DbHandler) Insert(request models.IRequest) (result models.IBaseModel, err error) {
@@ -31,7 +32,9 @@ func (handler *DbHandler) Insert(request models.IRequest) (result models.IBaseMo
 	indexReq.Index = indexName
 	indexReq.DocumentID = fmt.Sprintf("%v", req.GetIDString())
 	indexReq.Body = strings.NewReader(body)
-	indexReq.Refresh = "true"
+	if request.GetTemp("refresh") != "false" {
+		indexReq.Refresh = "true"
+	}
 
 	resp, err := indexReq.Do(context.Background(), handler.DB.Client)
 	if err != nil {
